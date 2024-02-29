@@ -52,7 +52,7 @@ export const Content = styled(Dialog.Content)`
            cursor: pointer;
 
            &:hover {
-               background: ${props => props.theme["gray-500"]};
+               background: ${props => props.theme["green-700"]};
                transition: background-color 0.2s;
            }
            

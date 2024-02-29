@@ -9,27 +9,27 @@ export function NewTransactionModal() {
             <Content>
                 <Dialog.Title>New transaction</Dialog.Title>
 
-                <CloseButton>
+                <CloseButton tabIndex={1} >
                     <X size={24} />
                 </CloseButton>
 
                 <form action=''>
-                    <input type='text' placeholder='Description' required />
-                    <input type='number' inputMode='numeric' placeholder='Price' required />
-                    <input type='text' placeholder='Category' required />
+                    <input tabIndex={2} type='text' placeholder='Description' required />
+                    <input tabIndex={3} type='number' inputMode='numeric' placeholder='Price' required />
+                    <input tabIndex={4} type='text' placeholder='Category' required />
 
                     <TransactionType>
-                        <TransactionTypeButton variant='entry' value='entry'>
+                        <TransactionTypeButton tabIndex={5} variant='entry' value='entry'>
                             <ArrowCircleUp size={24} />
                             Entry
                         </TransactionTypeButton>
-                        <TransactionTypeButton variant='exit' value='exit'>
+                        <TransactionTypeButton tabIndex={6} variant='exit' value='exit'>
                             <ArrowCircleDown size={24} />
                             Exit
                         </TransactionTypeButton>
                     </TransactionType>
 
-                    <button type='submit'>Register</button>
+                    <button tabIndex={7} type='submit'>Register</button>
                 </form>
             </Content>
         </Dialog.Portal>
