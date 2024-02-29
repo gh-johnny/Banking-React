@@ -19,12 +19,12 @@ export function NewTransactionModal() {
                     <input type='text' placeholder='Category' required />
 
                     <TransactionType>
-                        <TransactionTypeButton variant='entry'>
-                            <ArrowCircleUp size={24} color="#00b37e" />
+                        <TransactionTypeButton variant='entry' value='entry'>
+                            <ArrowCircleUp size={24} />
                             Entry
                         </TransactionTypeButton>
-                        <TransactionTypeButton variant='exit'>
-                            <ArrowCircleDown size={24} color="#f75a68" />
+                        <TransactionTypeButton variant='exit' value='exit'>
+                            <ArrowCircleDown size={24} />
                             Exit
                         </TransactionTypeButton>
                     </TransactionType>
