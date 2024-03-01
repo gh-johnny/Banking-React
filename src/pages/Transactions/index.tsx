@@ -1,8 +1,54 @@
+import { useEffect, useState } from "react";
 import { Summary } from "../../components/Summary";
 import { SearchForm } from "./components/SearchForm";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
 
+interface ITransaction {
+    id: number,
+    description: string,
+    type: boolean, // 'entry' | 'exit',
+    price: number,
+    category: string,
+    createdAt: string,
+}
+
 export function Transactions() {
+    const [transactions, setTransactions] = useState<ITransaction[]>([])
+
+    async function fetchTransactions() {
+        try {
+            const res = await fetch('https://65e22337a8583365b317f334.mockapi.io/transactions')
+            const data = await res.json() as ITransaction[]
+            setTransactions(data.map(item => {
+                if (item.category !== 'withdrawal') {
+                    return {
+                        ...item,
+                        type: false,
+                    }
+                } else {
+                    return { ...item }
+
+                }
+            }))
+            console.log(data.map(item => {
+                if (item.category === 'withdrawal') {
+                    return {
+                        ...item,
+                        type: false,
+                    }
+                } else {
+                    return { ...item, type: true }
+                }
+            }))
+        } catch (err) {
+            console.error('could not fetch data from mockapi.io: ' + err)
+        }
+    }
+
+    useEffect(() => {
+        fetchTransactions()
+    }, [])
+
     return (
         <>
             <Summary />
@@ -10,21 +56,20 @@ export function Transactions() {
                 <SearchForm />
                 <TransactionsTable>
                     <tbody>
-                        <tr>
-                            <td>Web development</td>
-                            <td><PriceHighlight variant="entry">$ 12.000.00</PriceHighlight></td>
-                            <td>Tenants</td>
-                            <td>13/05/2024</td>
-                        </tr>
-                        <tr>
-                            <td>Monthly fees</td>
-                            <td><PriceHighlight variant="exit">- $ 3.000.00</PriceHighlight></td>
-                            <td>Rent</td>
-                            <td>02/02/2024</td>
-                        </tr>
+                        {
+                            transactions.map(item =>
+                                <tr key={item.id}>
+                                    <td>{item.description}</td>
+                                    <td><PriceHighlight variant={item.category === 'withdrawal' || item.category === 'deposit' ? 'exit' : 'entry'}>$ {item.price}</PriceHighlight></td>
+                                    <td>{item.category}</td>
+                                    <td>{item.createdAt}</td>
+                                </tr>
+                            )
+                        }
                     </tbody>
                 </TransactionsTable>
             </TransactionsContainer>
         </>
     )
 }
+
