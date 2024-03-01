@@ -4,10 +4,10 @@ import { SearchForm } from "./components/SearchForm";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
 
 interface ITransaction {
-    id: number,
+    id: string,
     description: string,
     type: boolean, // 'entry' | 'exit',
-    price: number,
+    price: string,
     category: string,
     createdAt: string,
 }
@@ -30,18 +30,13 @@ export function Transactions() {
 
                 }
             }))
-            console.log(data.map(item => {
-                if (item.category === 'withdrawal') {
-                    return {
-                        ...item,
-                        type: false,
-                    }
-                } else {
-                    return { ...item, type: true }
-                }
-            }))
         } catch (err) {
             console.error('could not fetch data from mockapi.io: ' + err)
+            // hardcoded data if fetch fails just to make sure there already is data in there
+            setTransactions([
+                { description: "Shoes", type: false, price: "734.00", category: "withdrawal", createdAt: "2023-12-08T12:05:41.577Z", id: "1" },
+                { description: "Bacon", type: true, price: "14.00", category: "invoice", createdAt: "2023-04-24T21:52:12.633Z", id: "2" }
+            ])
         }
     }
 
@@ -56,15 +51,15 @@ export function Transactions() {
                 <SearchForm />
                 <TransactionsTable>
                     <tbody>
-                        {
-                            transactions.map(item =>
-                                <tr key={item.id}>
+                        {transactions.length !== 0 &&
+                            transactions.slice(0, 10).map(item => { // Just trimming some data, not all is needed to be shown for the example
+                                return <tr key={item.id}>
                                     <td>{item.description}</td>
                                     <td><PriceHighlight variant={item.category === 'withdrawal' || item.category === 'deposit' ? 'exit' : 'entry'}>$ {item.price}</PriceHighlight></td>
                                     <td>{item.category}</td>
                                     <td>{item.createdAt}</td>
                                 </tr>
-                            )
+                            })
                         }
                     </tbody>
                 </TransactionsTable>
