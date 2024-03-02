@@ -1,5 +1,4 @@
-import { ReactNode, createContext } from "react";
-
+import { useState, useEffect, ReactNode, createContext } from "react";
 
 interface ITransaction {
     id: string,
@@ -14,10 +13,35 @@ interface ITransactionContext {
     transactions: ITransaction[]
 }
 
-const TransactionContext = createContext({} as ITransactionContext)
+export const TransactionsContext = createContext({} as ITransactionContext)
+
+const defaultCouldNotFetchData = [
+    { description: "Shoes", type: false, price: "734.00", category: "withdrawal", createdAt: "2023-12-08T12:05:41.577Z", id: "1" },
+    { description: "Bacon", type: true, price: "14.00", category: "invoice", createdAt: "2023-04-24T21:52:12.633Z", id: "2" }
+]
 
 export function TransactionsProvider({ children }: { children: ReactNode }) {
-    <TransactionContext.Provider value={{ transactions: [] }}>
-        {children}
-    </TransactionContext.Provider>
+    const [transactions, setTransactions] = useState<ITransaction[]>([])
+
+    async function fetchTransactions() {
+        try {
+            const res = await fetch('https://65e22337a8583365b317f334.mockapi.io/transactions')
+            const data = await res.json() as ITransaction[]
+            setTransactions(data.slice(0, 7)) // Just trimming some data, not all is needed to be shown for the example
+        } catch (err) {
+            console.error('Could not fetch data from mockapi.io: ' + err)
+            // Hardcoded data if fetch fails just to make sure some data will be shown
+            setTransactions(defaultCouldNotFetchData)
+        }
+    }
+
+    useEffect(() => {
+        fetchTransactions()
+    }, [])
+
+    return (
+        <TransactionsContext.Provider value={{ transactions }}>
+            {children}
+        </TransactionsContext.Provider>
+    )
 }

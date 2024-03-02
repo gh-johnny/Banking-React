@@ -3,6 +3,7 @@ import { defaultTheme } from "./styles/themes/default"
 import { GlobalStyle } from "./styles/global"
 import { BrowserRouter } from "react-router-dom"
 import { Router } from "./Router"
+import { TransactionsProvider } from "./contexts/TransactionContext"
 
 function App() {
 
@@ -11,7 +12,9 @@ function App() {
             <BrowserRouter>
                 <ThemeProvider theme={defaultTheme}>
                     <GlobalStyle />
-                    <Router />
+                    <TransactionsProvider>
+                        <Router />
+                    </TransactionsProvider>
                 </ThemeProvider>
             </BrowserRouter>
         </>
