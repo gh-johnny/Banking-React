@@ -7,7 +7,7 @@ export function Summary() {
     const { transactions } = useContext(TransactionsContext)
 
     const summary = transactions.reduce((acc, curr) => {
-        if (curr.category === 'invoice' || curr.category === 'invoice') {
+        if (curr.type === "entry") {
             acc.entry += Number(curr.price)
             acc.total += Number(curr.price)
             return acc
