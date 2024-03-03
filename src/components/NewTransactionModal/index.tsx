@@ -4,9 +4,12 @@ import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
 import { TNewTransactionFormZodSchema, newTransactionFormZodSchema } from '../../libs/zod/newTransactionFormZodSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { TransactionsContext } from '../../contexts/TransactionContext'
 
 export function NewTransactionModal() {
+    const { setTransactions } = useContext(TransactionsContext)
+    let { originalData } = useContext(TransactionsContext)
     // Apparently styled-components will not let me pass anything other than a simple string
     // The data-set method works but cannot set it imperatively (babel gets mad)
     const [isEntryButtonTypeActive, setIsEntryButtonTypeActive] = useState<'true' | 'false'>('true')
@@ -14,9 +17,6 @@ export function NewTransactionModal() {
 
     const { setValue, control, register, handleSubmit, formState: { isSubmitting } } = useForm<TNewTransactionFormZodSchema>({
         resolver: zodResolver(newTransactionFormZodSchema),
-        defaultValues: {
-            type: 'entry'
-        }
     })
 
     const onKeyDownFormRadio = (e: string, type: "entry" | "exit") => {
@@ -26,9 +26,23 @@ export function NewTransactionModal() {
         setIsExitButtonTypeActive(prev => prev === 'true' ? 'false' : 'true')
     }
 
+    const onClickFormRadio = (e: "entry" | "exit") => {
+        setValue('type', e)
+        setIsEntryButtonTypeActive(prev => prev === 'true' ? 'false' : 'true')
+        setIsExitButtonTypeActive(prev => prev === 'true' ? 'false' : 'true')
+    }
+
     const handleNewTransaction = async (data: TNewTransactionFormZodSchema) => {
-        await new Promise(resolve => setTimeout(resolve, 2000))
-        console.log(data)
+        const { type, price, category, description } = data
+        originalData = [...originalData, {
+            id: String(new Date().getTime()),
+            description,
+            type,
+            price,
+            category,
+            createdAt: String(new Date()),
+        }]
+        setTransactions(originalData)
     }
 
     return (
@@ -37,26 +51,26 @@ export function NewTransactionModal() {
             <Content>
                 <Dialog.Title>New transaction</Dialog.Title>
 
-                <CloseButton tabIndex={1} >
+                <CloseButton tabIndex={5} >
                     <X size={24} />
                 </CloseButton>
 
                 <form onSubmit={handleSubmit(handleNewTransaction)}>
                     <input
-                        tabIndex={2}
+                        tabIndex={6}
                         type='text'
                         placeholder='Description'
                         {...register('description')}
                     />
                     <input
-                        tabIndex={3}
+                        tabIndex={7}
                         type='number'
                         inputMode='numeric'
                         placeholder='Price'
                         {...register('price')}
                     />
                     <input
-                        tabIndex={4}
+                        tabIndex={8}
                         type='text'
                         placeholder='Category'
                         {...register('category')}
@@ -68,12 +82,12 @@ export function NewTransactionModal() {
                         render={({ field }) => {
                             return (
                                 <TransactionType
-                                    onValueChange={field.onChange}
+                                    onValueChange={e => onClickFormRadio(e as "entry" | "exit")}
                                     value={field.value}
                                     onKeyDown={e => onKeyDownFormRadio(e.key, field.value)}
                                 >
                                     <TransactionTypeButton
-                                        tabIndex={5}
+                                        tabIndex={9}
                                         variant='entry'
                                         value='entry'
                                         active={isEntryButtonTypeActive}
@@ -83,7 +97,7 @@ export function NewTransactionModal() {
                                         Entry
                                     </TransactionTypeButton>
                                     <TransactionTypeButton
-                                        tabIndex={6}
+                                        tabIndex={10}
                                         variant='exit'
                                         value='exit'
                                         active={isExitButtonTypeActive}
@@ -98,7 +112,7 @@ export function NewTransactionModal() {
                     />
 
                     <button
-                        tabIndex={7}
+                        tabIndex={11}
                         type='submit'
                         disabled={isSubmitting}
                     >
