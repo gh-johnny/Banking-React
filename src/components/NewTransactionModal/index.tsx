@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Overlay, Content, CloseButton, TransactionType, TransactionTypeButton } from './styles'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
-import { TNewTransactionFormZodSchema, newTransactionFormZodSchema } from '../../libs/newTransactionFormZodSchema'
+import { TNewTransactionFormZodSchema, newTransactionFormZodSchema } from '../../libs/zod/newTransactionFormZodSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 
