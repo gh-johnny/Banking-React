@@ -1,8 +1,14 @@
+import { useContext } from "react";
 import { Summary } from "../../components/Summary";
 import { SearchForm } from "./components/SearchForm";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
+import { TransactionsContext } from "../../contexts/TransactionContext";
+import { priceFormatter } from "../../utils/currencyFormatter";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 export function Transactions() {
+    const { transactions } = useContext(TransactionsContext)
+
     return (
         <>
             <Summary />
@@ -10,21 +16,25 @@ export function Transactions() {
                 <SearchForm />
                 <TransactionsTable>
                     <tbody>
-                        <tr>
-                            <td>Web development</td>
-                            <td><PriceHighlight variant="entry">$ 12.000.00</PriceHighlight></td>
-                            <td>Tenants</td>
-                            <td>13/05/2024</td>
-                        </tr>
-                        <tr>
-                            <td>Monthly fees</td>
-                            <td><PriceHighlight variant="exit">- $ 3.000.00</PriceHighlight></td>
-                            <td>Rent</td>
-                            <td>02/02/2024</td>
-                        </tr>
+                        {transactions.length !== 0 &&
+                            transactions.map(item => {
+                                return <tr key={item.id}>
+                                    <td>{item.description}</td>
+                                    <td>
+                                        <PriceHighlight variant={item.category === 'withdrawal' || item.category === 'deposit' ? 'exit' : 'entry'}>
+                                            {item.type === "exit" && '- '}
+                                            $ {priceFormatter.format(Number(item.price)).replace('$', '')}
+                                        </PriceHighlight>
+                                    </td>
+                                    <td>{item.category}</td>
+                                    <td>{dateFormatter.format(new Date(item.createdAt))}</td>
+                                </tr>
+                            })
+                        }
                     </tbody>
                 </TransactionsTable>
             </TransactionsContainer>
         </>
     )
 }
+
