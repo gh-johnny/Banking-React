@@ -2,16 +2,11 @@ import { z } from 'zod';
 
 export const newTransactionFormZodSchema = z.object({
     description:
-        z.string({
-            required_error: 'A description is required',
-        }),
-    price: z.string({
-        required_error: 'A price is required'
-    }),
+        z.string().min(1, 'A description is required'),
+    price:
+        z.string().min(1, 'A price is required'),
     category:
-        z.string({
-            required_error: 'A category is required',
-        }),
+        z.string().min(1, 'A category is required'),
     type:
         z.enum(['entry', 'exit']),
 })
