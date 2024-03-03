@@ -39,6 +39,10 @@ export const NewTransactionButton = styled.button`
     border-radius: 6px;
     cursor: pointer;
 
+    &:focus {
+        box-shadow: 0 0 0 2px ${props => props.theme.white};
+    }
+
     &:hover {
         background: ${props => props.theme["green-700"]};
         transition: background-color 0.2s;
