@@ -31,6 +31,10 @@ export const SearchFormContainer = styled.form`
         border-radius: 6px;
         cursor: pointer;
 
+        &:focus {
+            box-shadow: 0 0 0 2px ${props => props.theme.white};
+        }
+
         &:disabled {
             opacity: 0.7;
             cursor: not-allowed;
