@@ -1,7 +1,7 @@
 import { ArrowCounterClockwise, MagnifyingGlass } from "phosphor-react";
 import { SearchFormContainer } from "./styles";
 import { useForm } from "react-hook-form";
-import { searchFormSchema, TSearchFormSchema } from "../../../../libs/searchFormZodSchema";
+import { searchFormSchema, TSearchFormSchema } from "../../../../libs/zod/searchFormZodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
 import { TransactionsContext } from "../../../../contexts/TransactionContext";

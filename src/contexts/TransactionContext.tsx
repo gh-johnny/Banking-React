@@ -1,4 +1,5 @@
 import { useState, useEffect, ReactNode, createContext } from "react";
+import { axiosInstance } from "../libs/axios/axios";
 
 interface ITransaction {
     id: string,
@@ -27,10 +28,9 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
     const [transactions, setTransactions] = useState<ITransaction[]>([])
 
     useEffect(() => {
-        async function fetchTransactions(id: string = '') {
+        async function fetchTransactions() {
             try {
-                const res = await fetch(`https://65e22337a8583365b317f334.mockapi.io/transactions${'/' + id}`)
-                const data = await res.json() as ITransaction[]
+                const { data } = await axiosInstance.get(`/transactions`) as { data: ITransaction[] }
                 // setTransactions(data.slice(0, 7)) // Just trimming some data, not all is needed to be shown for the example
                 setTransactions(data)
                 originalData = data
