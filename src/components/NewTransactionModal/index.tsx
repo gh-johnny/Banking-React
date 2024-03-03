@@ -4,11 +4,11 @@ import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
 import { Controller, useForm } from 'react-hook-form'
 import { TNewTransactionFormZodSchema, newTransactionFormZodSchema } from '../../libs/newTransactionFormZodSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 export function NewTransactionModal() {
-    const ref = useRef<HTMLInputElement | null>(null)
-
+    // Apparently styled-components will not let me pass anything other than a simple string
+    // The data-set method works but cannot set it imperatively (babel gets mad)
     const [isEntryButtonTypeActive, setIsEntryButtonTypeActive] = useState<'true' | 'false'>('true')
     const [isExitButtonTypeActive, setIsExitButtonTypeActive] = useState<'true' | 'false'>('false')
 
@@ -71,7 +71,6 @@ export function NewTransactionModal() {
                                     onValueChange={field.onChange}
                                     value={field.value}
                                     onKeyDown={e => onKeyDownFormRadio(e.key, field.value)}
-                                    ref={ref}
                                 >
                                     <TransactionTypeButton
                                         tabIndex={5}
