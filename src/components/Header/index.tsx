@@ -20,7 +20,7 @@ export function Header() {
 
                 <Dialog.Root>
                     <Dialog.Trigger asChild>
-                        <NewTransactionButton type="button">New transaction</NewTransactionButton>
+                        <NewTransactionButton tabIndex={4} type="button">New transaction</NewTransactionButton>
                     </Dialog.Trigger>
 
                     <NewTransactionModal />

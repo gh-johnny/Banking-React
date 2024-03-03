@@ -16,7 +16,7 @@ export function Transactions() {
                 <SearchForm />
                 <TransactionsTable>
                     <tbody>
-                        {transactions.length !== 0 &&
+                        {transactions.length !== 0 ?
                             transactions.map(item => {
                                 return <tr key={item.id}>
                                     <td>{item.description}</td>
@@ -30,6 +30,10 @@ export function Transactions() {
                                     <td>{dateFormatter.format(new Date(item.createdAt))}</td>
                                 </tr>
                             })
+                            :
+                            <tr>
+                                <td width={'100%'}>No data was found</td>
+                            </tr>
                         }
                     </tbody>
                 </TransactionsTable>
