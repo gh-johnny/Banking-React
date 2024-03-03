@@ -88,7 +88,8 @@ export const TransactionType = styled(RadioGroup.Root)`
 `
 
 interface ITransactionTypeButton {
-    variant: 'entry' | 'exit'
+    variant: 'entry' | 'exit',
+    active: 'true' | 'false',
 }
 
 export const TransactionTypeButton = styled(RadioGroup.Item) <ITransactionTypeButton>`
@@ -112,12 +113,12 @@ export const TransactionTypeButton = styled(RadioGroup.Item) <ITransactionTypeBu
         transition: background-color 0.2s;
     }
 
-    &[data-state='checked'] {
-        color: ${props => props.theme.white};
-        background: ${props => props.variant === 'entry' ? props.theme["green-500"] : props.theme["red-500"]};
+    ${props => props.active === 'true' && `
+        color: ${props.theme.white};
+        background: ${props.variant === 'entry' ? props.theme["green-500"] : props.theme["red-500"]};
 
         svg {
-            color: ${props => props.theme.white};
+            color: ${props.theme.white};
         }
-    }
+    `}
 `
