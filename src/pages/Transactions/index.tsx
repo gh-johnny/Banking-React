@@ -3,6 +3,8 @@ import { Summary } from "../../components/Summary";
 import { SearchForm } from "./components/SearchForm";
 import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styles";
 import { TransactionsContext } from "../../contexts/TransactionContext";
+import { priceFormatter } from "../../utils/currencyFormatter";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 export function Transactions() {
     const { transactions } = useContext(TransactionsContext)
@@ -18,9 +20,14 @@ export function Transactions() {
                             transactions.map(item => {
                                 return <tr key={item.id}>
                                     <td>{item.description}</td>
-                                    <td><PriceHighlight variant={item.category === 'withdrawal' || item.category === 'deposit' ? 'exit' : 'entry'}>$ {item.price}</PriceHighlight></td>
+                                    <td>
+                                        <PriceHighlight variant={item.category === 'withdrawal' || item.category === 'deposit' ? 'exit' : 'entry'}>
+                                            {item.type === "exit" && '- '}
+                                            $ {priceFormatter.format(Number(item.price)).replace('$', '')}
+                                        </PriceHighlight>
+                                    </td>
                                     <td>{item.category}</td>
-                                    <td>{item.createdAt}</td>
+                                    <td>{dateFormatter.format(new Date(item.createdAt))}</td>
                                 </tr>
                             })
                         }
