@@ -6,6 +6,7 @@ import { TNewTransactionFormZodSchema, newTransactionFormZodSchema } from '../..
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext, useState } from 'react'
 import { TransactionsContext } from '../../contexts/TransactionContext'
+import { axiosInstance } from '../../libs/axios/axios'
 
 export function NewTransactionModal() {
     const { setTransactions } = useContext(TransactionsContext)
@@ -34,15 +35,18 @@ export function NewTransactionModal() {
 
     const handleNewTransaction = async (data: TNewTransactionFormZodSchema) => {
         const { type, price, category, description } = data
-        originalData = [...originalData, {
+        const createdData = {
             id: String(new Date().getTime()),
             description,
             type,
             price,
             category,
             createdAt: String(new Date()),
-        }]
+        }
+        originalData = [...originalData, createdData]
         setTransactions(originalData)
+        await axiosInstance.post('/transactions', createdData)
+            .catch(err => console.error('Failed to create new transaction: ' + err))
     }
 
     return (
