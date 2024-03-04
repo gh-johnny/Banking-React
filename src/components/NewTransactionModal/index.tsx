@@ -20,7 +20,7 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
     const [isEntryButtonTypeActive, setIsEntryButtonTypeActive] = useState<'true' | 'false'>('true')
     const [isExitButtonTypeActive, setIsExitButtonTypeActive] = useState<'true' | 'false'>('false')
 
-    const { setValue, control, register, handleSubmit, formState: { isSubmitting } } = useForm<TNewTransactionFormZodSchema>({
+    const { reset, setValue, control, register, handleSubmit, formState: { isSubmitting } } = useForm<TNewTransactionFormZodSchema>({
         resolver: zodResolver(newTransactionFormZodSchema),
     })
 
@@ -49,8 +49,9 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
         }
         originalData = [...originalData, createdData]
         setTransactions(originalData)
-        toSetModalOpen(false)
+        reset()
         await axiosInstance.post('/transactions', createdData)
+            .then(res => res.status.toString()[0] === '2' && toSetModalOpen(false))
             .catch(err => console.error('Failed to create new transaction: ' + err))
     }
 
