@@ -3,8 +3,15 @@ import { HeaderContainer, HeaderContent, LogoContainer, NewTransactionButton } f
 import logoImg from '../../assets/logo/logo-johnny.svg'
 import * as Dialog from "@radix-ui/react-dialog";
 import { NewTransactionModal } from "../NewTransactionModal";
+import { useState } from "react";
 
 export function Header() {
+    const [open, setOpen] = useState(false)
+
+    const toSetModalOpen = (shouldCloseModal: boolean) => {
+        setOpen(shouldCloseModal)
+    }
+
     return (
         <HeaderContainer>
             <HeaderContent>
@@ -18,12 +25,12 @@ export function Header() {
                     <span>Banking</span>
                 </LogoContainer>
 
-                <Dialog.Root>
+                <Dialog.Root open={open} onOpenChange={setOpen}>
                     <Dialog.Trigger asChild>
                         <NewTransactionButton tabIndex={4} type="button">New transaction</NewTransactionButton>
                     </Dialog.Trigger>
 
-                    <NewTransactionModal />
+                    <NewTransactionModal toSetModalOpen={toSetModalOpen} />
 
                 </Dialog.Root>
 

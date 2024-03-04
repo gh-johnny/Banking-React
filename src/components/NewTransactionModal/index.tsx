@@ -8,7 +8,11 @@ import { useContext, useState } from 'react'
 import { TransactionsContext } from '../../contexts/TransactionContext'
 import { axiosInstance } from '../../libs/axios/axios'
 
-export function NewTransactionModal() {
+interface INewTransactionModalProps {
+    toSetModalOpen: (shouldCloseModal: boolean) => void,
+}
+
+export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProps) {
     const { setTransactions } = useContext(TransactionsContext)
     let { originalData } = useContext(TransactionsContext)
     // Apparently styled-components will not let me pass anything other than a simple string
@@ -45,6 +49,7 @@ export function NewTransactionModal() {
         }
         originalData = [...originalData, createdData]
         setTransactions(originalData)
+        toSetModalOpen(false)
         await axiosInstance.post('/transactions', createdData)
             .catch(err => console.error('Failed to create new transaction: ' + err))
     }
