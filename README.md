@@ -61,7 +61,7 @@ Use package manager/runner of preference (npm, yarn, pnpm, bun...) <br>
 Now enter the project install dependencies, start local server and open it on your browser with
 
 ```
-cd Timer-React/ &&
+cd Banking-React/ &&
 npm install &&
 npm run dev
 ```
