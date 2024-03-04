@@ -11,7 +11,7 @@ export const Overlay = styled(Dialog.Overlay)`
 `
 
 export const Content = styled(Dialog.Content)`
-   min-width: 32px; 
+   min-width: 400px; 
    border-radius: 6px; 
    padding: 2.5rem 3rem; 
    background: ${props => props.theme["gray-800"]};
@@ -108,10 +108,12 @@ export const TransactionTypeButton = styled(RadioGroup.Item) <ITransactionTypeBu
         color: ${props => props.variant === 'entry' ? props.theme["green-300"] : props.theme["red-300"]};
     }
 
-    &[data-state='unchecked']:hover {
-        background: ${props => props.theme["gray-600"]};
-        transition: background-color 0.2s;
-    }
+    ${props => props.active === 'false' && `
+        &:hover {
+            background: ${props.theme["gray-600"]};
+            transition: background-color 0.2s;
+        }
+    `}
 
     ${props => props.active === 'true' && `
         color: ${props.theme.white};

@@ -31,7 +31,6 @@ export function TransactionsProvider({ children }: { children: ReactNode }) {
         async function fetchTransactions() {
             try {
                 const { data } = await axiosInstance.get(`/transactions`) as { data: ITransaction[] }
-                // setTransactions(data.slice(0, 7)) // Just trimming some data, not all is needed to be shown for the example
                 setTransactions(data)
                 originalData = data
             }
