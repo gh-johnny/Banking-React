@@ -6,9 +6,20 @@ import { TransactionsContext } from "../../contexts/TransactionContext";
 import { priceFormatter } from "../../utils/currencyFormatter";
 import { dateFormatter } from "../../utils/dateFormatter";
 import { TrashSimple } from "phosphor-react";
+import { axiosInstance } from "../../libs/axios/axios";
 
 export function Transactions() {
-    const { transactions } = useContext(TransactionsContext)
+    const { originalData, transactions, setTransactions } = useContext(TransactionsContext)
+
+    const onClickDeleteTransaction = (itemId: string) => {
+        axiosInstance.delete(`/transactions/${itemId}`)
+            .then(res => {
+                if (res.status.toString()[0] !== '2') return
+                setTransactions(prev => prev.filter(transaction => transaction.id !== itemId))
+                originalData.filter(transaction => transaction.id !== itemId)
+            })
+            .catch(err => console.error('Unable to delete transaction' + err))
+    }
 
     return (
         <>
@@ -30,7 +41,7 @@ export function Transactions() {
                                     <td>{item.category}</td>
                                     <td>{dateFormatter.format(new Date(item.createdAt))}</td>
                                     <td>
-                                        <div>
+                                        <div onClick={() => onClickDeleteTransaction(item.id)}>
                                             <TrashSimple size={18} />
                                         </div>
                                     </td>
