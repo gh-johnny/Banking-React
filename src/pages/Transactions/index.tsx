@@ -34,7 +34,7 @@ export function Transactions() {
                                     <td>{item.description}</td>
                                     <td>
                                         <PriceHighlight variant={item.type === 'entry' ? 'entry' : 'exit'}>
-                                            {item.type === "exit" && '- '}
+                                            {item.type === "exit" || !item.type && '- '}
                                             $ {priceFormatter.format(Number(item.price)).replace('$', '')}
                                         </PriceHighlight>
                                     </td>
