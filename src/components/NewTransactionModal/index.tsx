@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { Overlay, Content, CloseButton, TransactionType, TransactionTypeButton } from './styles'
+import { Overlay, Content, CloseButton, TransactionType, TransactionTypeButton, FormError } from './styles'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, Form, useForm } from 'react-hook-form'
 import { TNewTransactionFormZodSchema, newTransactionFormZodSchema } from '../../libs/zod/newTransactionFormZodSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useContext, useState } from 'react'
@@ -20,7 +20,9 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
     const [isEntryButtonTypeActive, setIsEntryButtonTypeActive] = useState<'true' | 'false'>('true')
     const [isExitButtonTypeActive, setIsExitButtonTypeActive] = useState<'true' | 'false'>('false')
 
-    const { reset, setValue, control, register, handleSubmit, formState: { isSubmitting } } = useForm<TNewTransactionFormZodSchema>({
+    const [customError, setCustomError] = useState<string | null>(null)
+
+    const { reset, setValue, control, register, handleSubmit, formState: { errors, isSubmitting } } = useForm<TNewTransactionFormZodSchema>({
         resolver: zodResolver(newTransactionFormZodSchema),
     })
 
@@ -51,8 +53,14 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
         setTransactions(originalData)
         reset()
         await axiosInstance.post('/transactions', createdData)
-            .then(res => res.status.toString()[0] === '2' && toSetModalOpen(false))
-            .catch(err => console.error('Failed to create new transaction: ' + err))
+            .then(res => res.status.toString()[0] === '2' ? toSetModalOpen(false) : null
+            )
+            .catch(err => {
+                console.error('Failed to create new transaction: ' + err)
+                const errMsgSplit = err.message.split(" ")
+                if (Number(errMsgSplit[errMsgSplit.length - 1]) == 400)
+                    setCustomError('Max data has been probably been reached (100) Please delete some transactions')
+            })
     }
 
     return (
@@ -66,12 +74,18 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
                 </CloseButton>
 
                 <form onSubmit={handleSubmit(handleNewTransaction)}>
+                    <FormError>
+                        {errors?.description && errors.description?.message + ' *'}
+                    </FormError>
                     <input
                         tabIndex={6}
                         type='text'
                         placeholder='Description'
                         {...register('description')}
                     />
+                    <FormError>
+                        {errors?.price && errors.price?.message + ' *'}
+                    </FormError>
                     <input
                         tabIndex={7}
                         type='number'
@@ -79,6 +93,9 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
                         placeholder='Price'
                         {...register('price')}
                     />
+                    <FormError>
+                        {errors?.category && errors.category?.message + ' *'}
+                    </FormError>
                     <input
                         tabIndex={8}
                         type='text'
@@ -128,6 +145,10 @@ export function NewTransactionModal({ toSetModalOpen }: INewTransactionModalProp
                     >
                         Register
                     </button>
+
+                    <FormError>
+                        {customError}
+                    </FormError>
                 </form>
             </Content>
         </Dialog.Portal>

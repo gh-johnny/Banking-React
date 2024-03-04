@@ -124,3 +124,7 @@ export const TransactionTypeButton = styled(RadioGroup.Item) <ITransactionTypeBu
         }
     `}
 `
+
+export const FormError = styled.span`
+    color: ${props => props.theme["red-500"]};
+`
