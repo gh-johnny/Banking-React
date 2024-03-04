@@ -5,6 +5,10 @@ export const TransactionsContainer = styled.main`
     max-width: 1120px;
     margin: 4rem auto 0;
     padding: 0 1.5rem;
+    max-height: 40rem;
+    padding-top: .15rem;
+    overflow-y: auto;
+    overflow-x: hidden;
 `
 
 export const TransactionsTable = styled.table`
@@ -26,6 +30,26 @@ export const TransactionsTable = styled.table`
         &:last-child {
             border-top-right-radius: 6px;
             border-bottom-right-radius: 6px;
+
+            & > div {
+                width: 1.9rem;
+                height: 1.9rem;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                border-radius: 6px;
+            }
+
+            & > div:hover  {
+                background: ${props => props.theme["gray-600"]}; 
+                cursor: pointer;
+            }
+
+            svg {
+                color: ${props => props.theme["red-500"]};
+            }
         }
     }
 

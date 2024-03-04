@@ -9,7 +9,7 @@ import { TransactionsContext } from "../../../../contexts/TransactionContext";
 export function SearchForm() {
     const { setTransactions, originalData } = useContext(TransactionsContext)
 
-    const { register, handleSubmit, formState: { isSubmitting } } =
+    const { reset, register, handleSubmit, formState: { isSubmitting } } =
         useForm<TSearchFormSchema>({ resolver: zodResolver(searchFormSchema) })
 
     const handleSearchTransactions = async (data: TSearchFormSchema) => {
@@ -18,6 +18,7 @@ export function SearchForm() {
 
     const onClickReset = () => {
         setTransactions(originalData)
+        reset()
     }
 
     return (
@@ -34,7 +35,7 @@ export function SearchForm() {
                     title="reset"
                     type="button"
                     disabled={isSubmitting}
-                    onClick={onClickReset}
+                    onClick={() => onClickReset()}
                 >
                     <ArrowCounterClockwise size={20} />
                     Reset
