@@ -5,6 +5,7 @@ import { PriceHighlight, TransactionsContainer, TransactionsTable } from "./styl
 import { TransactionsContext } from "../../contexts/TransactionContext";
 import { priceFormatter } from "../../utils/currencyFormatter";
 import { dateFormatter } from "../../utils/dateFormatter";
+import { TrashSimple } from "phosphor-react";
 
 export function Transactions() {
     const { transactions } = useContext(TransactionsContext)
@@ -28,6 +29,11 @@ export function Transactions() {
                                     </td>
                                     <td>{item.category}</td>
                                     <td>{dateFormatter.format(new Date(item.createdAt))}</td>
+                                    <td>
+                                        <div>
+                                            <TrashSimple size={18} />
+                                        </div>
+                                    </td>
                                 </tr>
                             })
                             :
